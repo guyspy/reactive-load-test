@@ -31,19 +31,21 @@ class MainVerticle : CoroutineVerticle() {
    * app init
    */
   override suspend fun start() {
+
     // connect to mongoDB
     mongoClient = MongoClient.createShared(
       vertx,
-      JsonObject()
-        .put("connection_string", "mongodb://localhost:27017")
-        .put("db_name", "reactive-load-test")
+      jsonObjectOf(
+        "connection_string" to "mongodb://localhost:27017",
+        "db_name" to "reactive-load-test"
+      )
     )
 
     // declare route
     val router = Router.router(vertx)
     router.get("/report").produces("text/plain").coroutineHandler {
       val result = upsert()
-      it.response().end("#${result.getLong("count")}")
+      it.response().end("#${result?.getLong("count") ?: "N/A"}")
     }
 
     // init server
@@ -54,8 +56,9 @@ class MainVerticle : CoroutineVerticle() {
 
   /**
    * upsert mongo
+   * Note: remember to add unique index to "hour" field
    */
-  suspend fun upsert() = mongoClient.findOneAndUpdateWithOptions(
+  private suspend fun upsert(): JsonObject? = mongoClient.findOneAndUpdateWithOptions(
     "VertxWebKotlinCoroutineMongo",
     jsonObjectOf("date" to jsonObjectOf("\$date" to Date().toStartOfCurrentHour().formatIsoDate())),
     jsonObjectOf("\$inc" to jsonObjectOf("count" to 1L)),
