@@ -19,9 +19,11 @@ jobs:
         distribution: 'adopt'
 
     - name: Build with Maven
-      run: mvn -B package --file springboot-web-mongo/pom.xml
+      working-directory: ./springboot-web-mongo
+      run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
+      working-directory: ./springboot-web-mongo
       run: mvn deploy
       env:
         GITHUB_TOKEN: ${{ github.token }}
