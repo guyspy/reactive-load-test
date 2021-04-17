@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Controller {
 
+
     @Autowired
     private MongoTemplate mongoTemplate;
+
 
     @GetMapping("/report")
     public String report() {
         // Note: remember to add unique index to "hour" field
         Document result = mongoTemplate.getCollection("SpringBootWebMongo")
                 .findOneAndUpdate(
-                        Filters.eq("hour", DateUtils.round(new Date(), Calendar.HOUR)),
+                        Filters.eq("hour", DateUtils.truncate(new Date(), Calendar.HOUR)),
                         Updates.inc("count", 1L),
                         new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER)
                 );
