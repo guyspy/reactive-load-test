@@ -31,7 +31,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
 
   build_vertx:
-    name: build vertx-web-mongo
+    name: build vertx-mongo
     runs-on: ubuntu-latest
 
     steps:
