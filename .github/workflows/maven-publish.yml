@@ -17,6 +17,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
       working-directory: ./springboot-web-mongo
@@ -24,6 +26,6 @@ jobs:
 
     - name: Publish to GitHub Packages Apache Maven
       working-directory: ./springboot-web-mongo
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn deploy -s .m2/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
