@@ -25,6 +25,14 @@
     <launcher.class>io.vertx.core.Launcher</launcher.class>
   </properties>
 
+  <distributionManagement>
+     <repository>
+       <id>github</id>
+       <name>GitHub guyspy Apache Maven Packages</name>
+       <url>https://maven.pkg.github.com/guyspy/reactive-load-test</url>
+     </repository>
+  </distributionManagement>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
